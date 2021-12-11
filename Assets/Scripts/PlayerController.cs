@@ -82,4 +82,9 @@ public class PlayerController : MonoBehaviour
         cameraMovement.x = 0;
         followingCamera.transform.Translate(cameraMovement, Space.World);
     }
+
+    public void ChangeSpeed(float changeAmount)
+    {
+        playerForwardSpeed += changeAmount;
+    }
 }
