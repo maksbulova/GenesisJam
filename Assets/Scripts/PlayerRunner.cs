@@ -29,14 +29,14 @@ public class PlayerRunner : MonoBehaviour
     {
         if (other.CompareTag("Obstacle") || playerState == PlayerState.normal)
         {
-            StartCoroutine(TakeDamage());
+            StartCoroutine(HitObstacle());
         }
     }
 
-    IEnumerator TakeDamage()
+    IEnumerator HitObstacle()
     {
         playerState = PlayerState.immortal;
-        playerController.ChangeSpeed(-slowdownStrenght);
+        playerController.StartCoroutine(playerController.ChangeSpeed(-slowdownStrenght));
 
         float timer = 0;
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -53,7 +53,7 @@ public class PlayerRunner : MonoBehaviour
 
         spriteRenderer.color = Color.white;
         playerState = PlayerState.normal;
-        playerController.ChangeSpeed(slowdownStrenght);
+        playerController.StartCoroutine(playerController.ChangeSpeed(slowdownStrenght));
     }
 
 }

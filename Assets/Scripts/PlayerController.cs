@@ -7,7 +7,9 @@ public class PlayerController : MonoBehaviour
     public float playerTurnSpeed, playerForwardSpeed;
     public float rightMovementBound, leftMovementBound;
     private Camera followingCamera;
-
+    public AnimationCurve accelerationCurve;
+    [Tooltip("Seconds for speed change")]
+    public float acceleration;
 
     private void Awake()
     {
@@ -83,8 +85,19 @@ public class PlayerController : MonoBehaviour
         followingCamera.transform.Translate(cameraMovement, Space.World);
     }
 
-    public void ChangeSpeed(float changeAmount)
+    public IEnumerator ChangeSpeed(float changeAmount)
     {
-        playerForwardSpeed += changeAmount;
+        float oldSpeed = playerForwardSpeed;
+        float newSpeed = playerForwardSpeed + changeAmount;
+
+        float timer = 0;
+        while (timer < acceleration)
+        {
+            float t = accelerationCurve.Evaluate(timer) / acceleration;
+            playerForwardSpeed = Mathf.Lerp(oldSpeed, newSpeed, t);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 }

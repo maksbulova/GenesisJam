@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IShoter, IDamageble
+public class Enemy : MonoBehaviour, IShoter, IShotable
 {
     [Header("Shot stats")]
     public float shotRate;
