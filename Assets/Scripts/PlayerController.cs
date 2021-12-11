@@ -4,38 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float playerSpeed;
-    public float rightMoveBound, leftMoveBound;
+    public float playerTurnSpeed, playerForwardSpeed;
+    public float rightMovementBound, leftMovementBound;
+    private Camera followingCamera;
+
+
+    private void Awake()
+    {
+        followingCamera = Camera.main;
+    }
 
     private void Start()
     {
+        StartCoroutine(Movement());
     }
 
-    private void Update()
+    void TouchHandler(out Vector3 turnDirection)
     {
-        if (Input.touchCount > 0)
+        Vector2 touchPosition = Input.GetTouch(0).position;
+        Vector2 normilizedTouchPosition = normilizePosition(touchPosition);
+
+        if (normilizedTouchPosition.x >= 0.5f)
         {
-            StartCoroutine(TouchHandler());
+            turnDirection = Vector3.right;
         }
-    }
-
-    IEnumerator TouchHandler()
-    {
-        while (Input.touchCount > 0)
+        else
         {
-            Vector2 touchPosition = Input.GetTouch(0).position;
-            Vector2 normilizedTouchPosition = normilizePosition(touchPosition);
-
-            if (normilizedTouchPosition.x >= 0.5f)
-            {
-                Move(Vector2.right);
-            }
-            else
-            {
-                Move(Vector2.left);
-            }
-
-            yield return null;
+            turnDirection = Vector3.left;
         }
     }
 
@@ -48,13 +43,43 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void Move(Vector3 direction)
+    IEnumerator Movement()
     {
-        Vector3 moveDirection = direction * playerSpeed * Time.deltaTime;
-        if (movementBounds.Contains(transform.position + moveDirection))
+        // TODO pause
+        while (Application.isPlaying)
         {
-            transform.Translate(moveDirection);
+            Vector3 turnMovement;
+            if (Input.touchCount > 0)
+            {
+                TouchHandler(out Vector3 turnDirection);
+
+                turnMovement = turnDirection * playerTurnSpeed * Time.deltaTime;
+                float newXPosition = transform.position.x + turnMovement.x;
+
+                if (newXPosition < leftMovementBound || newXPosition > rightMovementBound)
+                {
+                    turnMovement = Vector3.zero;
+                }
+            }
+            else
+            {
+                turnMovement = Vector3.zero;
+            }
+
+            Vector3 forwardMovment = Vector3.forward * playerForwardSpeed * Time.deltaTime;
+            Vector3 resultMovement = forwardMovment + turnMovement;
+            transform.Translate(resultMovement, Space.World);
+
+            FollowCamera(forwardMovment);
+
+            yield return null;
         }
     }
 
+    void FollowCamera(Vector3 followedMovement)
+    {
+        Vector3 cameraMovement = followedMovement;
+        cameraMovement.x = 0;
+        followingCamera.transform.Translate(cameraMovement, Space.World);
+    }
 }
