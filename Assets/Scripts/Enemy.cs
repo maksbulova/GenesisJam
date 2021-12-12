@@ -11,12 +11,13 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
     public GameObject bulletPrefab;
     private static Transform shotBarrel;
     public AnimationCurve movementCurve;
+    public float timeReward;
 
-    public static float[] moveLine = new float[] { 3, 4, 5, 6 };
-    public static Enemy[] enemies = new Enemy[moveLine.Length];
+    private static float[] moveLine = new float[] { 5, 6, 7};
+    private static Enemy[] enemies = new Enemy[moveLine.Length];
     private int myIndex;
 
-    private static LevelInfo levelInfo;
+    private static LevelManager levelManager;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
             shotBarrel = new GameObject("Enemy bullet container").transform;
         }
 
-        levelInfo = FindObjectOfType<LevelInfo>();
+        levelManager = FindObjectOfType<LevelManager>();
     }
 
     private void Start()
@@ -38,6 +39,7 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
                 spaceAvaiable = true;
                 enemies[i] = this;
                 myIndex = i;
+                break;
             }
         }
         if (!spaceAvaiable)
@@ -73,6 +75,8 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
 
     public void TakeDamage()
     {
+        levelManager.AddTime(timeReward);
+
         GetComponent<Collider>().enabled = false;
         StopAllCoroutines();
         // TODO falldown and effects
@@ -82,13 +86,13 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
 
     IEnumerator Movement()
     {
-        float leftBorder = levelInfo.playerController.leftMovementBound;
-        float rightBorder = levelInfo.playerController.rightMovementBound;
+        float leftBorder = levelManager.playerController.leftMovementBound;
+        float rightBorder = levelManager.playerController.rightMovementBound;
         float timer = 0;
 
         while (Application.isPlaying)
         {
-            Vector3 playerPosition = levelInfo.playerController.transform.position;
+            Vector3 playerPosition = levelManager.playerController.transform.position;
             Vector3 movePosition = playerPosition + Vector3.forward * moveLine[myIndex];
             float t = movementCurve.Evaluate(timer * turnSpeed);
             float moveX = (t * (rightBorder - leftBorder)) + leftBorder;

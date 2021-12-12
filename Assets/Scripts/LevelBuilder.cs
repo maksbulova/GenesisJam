@@ -6,12 +6,17 @@ using UnityEngine;
 public class LevelBuilder : MonoBehaviour
 {
     public GameObject[] levelModules;
-    public float blockSize;
+    public float moduleSize;
     public Transform modulesContainer;
     private int moduleOrder;
     private Queue<GameObject> builtModules;
     public int queueLength;
     public int startModuleAmount;
+    public bool spawnEnemies;
+    public GameObject enemy;
+    public float enemyProbability;
+
+    public PlayerController playerController;
 
     private void Awake()
     {
@@ -21,19 +26,37 @@ public class LevelBuilder : MonoBehaviour
 
     private void Start()
     {
+        Clear();
+
         if (Application.isPlaying)
         {
+            bool temp = spawnEnemies;
+            spawnEnemies = false;
             for (int i = 0; i < startModuleAmount; i++)
             {
                 AddModule();
             }
+            spawnEnemies = temp;
+        }
+
+        StartCoroutine(Timer());
+    }
+
+    IEnumerator Timer()
+    {
+        while (Application.isPlaying)
+        {
+            float t = moduleSize / playerController.playerForwardSpeed;
+
+            yield return new WaitForSeconds(t);
+            AddModule();
         }
     }
 
     [ContextMenu("Add module")]
     public void AddModule()
     {
-        Vector3 modulePosition = Vector3.forward * blockSize * moduleOrder;
+        Vector3 modulePosition = Vector3.forward * moduleSize * moduleOrder;
         int index = Random.Range(0, levelModules.Length);
         GameObject module = levelModules[index];
         GameObject newModule = Instantiate(module, modulePosition, module.transform.rotation, modulesContainer);
@@ -44,6 +67,17 @@ public class LevelBuilder : MonoBehaviour
         {
             RemoveModule();
         }
+
+        float rnd = Random.Range(0f, 1f);
+        if (spawnEnemies && rnd < enemyProbability)
+        {
+            SpawnEnemy();
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        Instantiate(enemy);
     }
 
     [ContextMenu("Remove module")]

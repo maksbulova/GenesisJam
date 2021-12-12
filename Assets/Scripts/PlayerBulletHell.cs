@@ -10,6 +10,8 @@ public class PlayerBulletHell : MonoBehaviour, IShotable, IShoter
     public GameObject bulletPrefab;
     public Transform shotBarrel;
 
+    public LevelManager levelManager;
+
     public void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, shotBarrel.position, Quaternion.identity, shotBarrel);
@@ -33,6 +35,7 @@ public class PlayerBulletHell : MonoBehaviour, IShotable, IShoter
     public void TakeDamage()
     {
         Debug.Log("Player hited");
+        levelManager.StartCoroutine(levelManager.ChangeWorld());
     }
 
     private IEnumerator Shoting()

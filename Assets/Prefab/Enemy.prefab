@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnSpeed: 1
   reloadTime: 2
-  bulletSpeed: 1
+  bulletSpeed: 0.5
   bulletPrefab: {fileID: 7625900123717689427, guid: 7d6eefaa750b7e249bc165f04746af5a, type: 3}
   movementCurve:
     serializedVersion: 2

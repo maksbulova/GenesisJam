@@ -18,21 +18,27 @@ public class PlayerRunner : MonoBehaviour
     public float slowdownStrenght;
     public float damageAnimationSpeed;
 
+    public LevelManager levelManager;
 
     private void Start()
     {
         playerController = gameObject.GetComponent<PlayerController>();
         playerState = PlayerState.normal;
     }
-
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Obstacle") || playerState == PlayerState.normal)
+        if (other.gameObject.CompareTag("Obstacle") || playerState == PlayerState.normal)
         {
             StartCoroutine(HitObstacle());
         }
-    }
 
+        if (other.gameObject.CompareTag("Pill"))
+        {
+            levelManager.StartCoroutine(levelManager.ChangeWorld());
+        }
+    }
+    
     IEnumerator HitObstacle()
     {
         playerState = PlayerState.immortal;
