@@ -7,4 +7,11 @@ public class LevelInfo : MonoBehaviour
     public static float difficulty;
     public static float progress;
     public static float timeLeft;
+
+    public PlayerController playerController;
+
+    private void Start()
+    {
+
+    }
 }

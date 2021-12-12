@@ -22,9 +22,17 @@ public class PlayerBulletHell : MonoBehaviour, IShotable, IShoter
         StartCoroutine(Shoting());
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            TakeDamage();
+        }
+    }
+
     public void TakeDamage()
     {
-
+        Debug.Log("Player hited");
     }
 
     private IEnumerator Shoting()
