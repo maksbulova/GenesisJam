@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
         float timer = 0;
         while (timer < acceleration)
         {
-            float t = accelerationCurve.Evaluate(timer) / acceleration;
+            float t = accelerationCurve.Evaluate(timer / acceleration);
             playerForwardSpeed = Mathf.Lerp(oldSpeed, newSpeed, t);
 
             timer += Time.deltaTime;

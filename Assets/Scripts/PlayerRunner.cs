@@ -56,7 +56,6 @@ public class PlayerRunner : MonoBehaviour
 
             yield return null;
         }
-
         spriteRenderer.color = Color.white;
         playerState = PlayerState.normal;
         playerController.StartCoroutine(playerController.ChangeSpeed(slowdownStrenght));

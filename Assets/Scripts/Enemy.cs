@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour, IShoter, IShotable
     public AnimationCurve movementCurve;
     public float timeReward;
 
-    private static float[] moveLine = new float[] { 5, 6, 7};
+    private static float[] moveLine = new float[] { 8, 9, 10};
     private static Enemy[] enemies = new Enemy[moveLine.Length];
     private int myIndex;
 

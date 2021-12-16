@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 1
-  reloadTime: 2
-  bulletSpeed: 0.5
+  reloadTime: 1
+  bulletSpeed: 1
   bulletPrefab: {fileID: 7625900123717689427, guid: 7d6eefaa750b7e249bc165f04746af5a, type: 3}
   movementCurve:
     serializedVersion: 2
@@ -74,6 +74,7 @@ MonoBehaviour:
     m_PreInfinity: 0
     m_PostInfinity: 0
     m_RotationOrder: 4
+  timeReward: 10
 --- !u!136 &960848059251786019
 CapsuleCollider:
   m_ObjectHideFlags: 0

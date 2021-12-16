@@ -44,10 +44,10 @@ public class LevelBuilder : MonoBehaviour
 
     IEnumerator Timer()
     {
+        float t = moduleSize / (playerController.playerForwardSpeed);
+
         while (Application.isPlaying)
         {
-            float t = moduleSize / playerController.playerForwardSpeed;
-
             yield return new WaitForSeconds(t);
             AddModule();
         }
@@ -69,6 +69,7 @@ public class LevelBuilder : MonoBehaviour
         }
 
         float rnd = Random.Range(0f, 1f);
+        rnd += LevelManager.difficulty / 100;
         if (spawnEnemies && rnd < enemyProbability)
         {
             SpawnEnemy();

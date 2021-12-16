@@ -14,16 +14,36 @@ public class LevelManager : MonoBehaviour
     public string anotherWorld;
     public float maxTime;
 
+    public bool timeRuns;
+
     private void Start()
     {
-        timeLeft = maxTime;
+        StartCoroutine(Simulation());
     }
 
-    IEnumerable Simulation()
+    private void Update()
+    {
+        if (timeLeft <=0)
+        {
+            Initialize();
+        }
+    }
+
+    public void Initialize()
+    {
+        Debug.Log("init");
+        timeLeft = maxTime;
+        difficulty = 0;
+    }
+
+    IEnumerator Simulation()
     {
         while (Application.isPlaying)
         {
-            timeLeft -= Time.deltaTime;
+            if (timeRuns)
+                timeLeft -= Time.deltaTime;
+
+            difficulty += Time.deltaTime;
 
             yield return null;
         }
